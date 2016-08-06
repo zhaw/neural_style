@@ -21,7 +21,7 @@ If your GPU memory is limited, you can restrict the size of the input image to a
 For more result, see this [gallary](https://zhaw.github.io/neuralstyleio) or [this](https://github.com/zhaw/neural_style/tree/pics)
 
 ## Speed and Memory
-Image with normal size should be transfered in 1~2 second. It takes 1.5G GPU memory to transform a 512x512 image. It takes 4.5G GPU memory to transform a 1920x1080 image. Some models are simpler than others so they use less GPU memory. 
+Image with normal size should be transfered in 1~2 second. It takes 1G GPU memory to transform a 512x512 image. It takes 4.5G GPU memory to transform a 1920x1080 image. Some models are simpler than others so they use less GPU memory. 
 
 Please notice that the first run will be very slow because it may take a lot of time for mxnet to allocate memory and that's why I recommand using a python console so the GPU memory can be reused. 
 
