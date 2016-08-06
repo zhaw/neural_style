@@ -6,7 +6,8 @@ from skimage import io, transform
 
 
 def crop_img(im, shape):
-    im = io.imread(im)
+    if type(im) == str:
+        im = io.imread(im)
     factor = 1. * shape[0] / shape[1]
     if im.shape[0] > im.shape[1]*factor:
         c = (im.shape[0]-int(factor*im.shape[1])) / 2
@@ -44,7 +45,10 @@ def postprocess_img(im, color_ref=None):
 def make_image(img, style, save_name, size=[]):
     with open('models/model%s.pkl'%style) as f:
         args, auxs, symbol = pickle.load(f)
-    im = io.imread(img)
+    if type(img) == str:
+        im = io.imread(img)
+    else:
+        im = img
     if not size:
         size = (im.shape[0]/32*32, im.shape[1]/32*32)
     for i in range(6):
