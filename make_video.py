@@ -33,7 +33,7 @@ def make_video(video_name, start, end, interval, style, save_name, size=[], batc
             if len(buf) == batchsize:
                 for j in range(batchsize):
                     for ii in range(6):
-                        gene_executor.arg_dict['zim_%d'%ii][j:j+1] = preprocess_img(cv2.cvtColor(buf[j], cv2.COLOR_BGR2RGB), (size[0]/2**(5-ii), size[1]/2**(5-ii)))
+                        gene_executor.arg_dict['zim_%d'%ii][j:j+1] = preprocess_img(buf[j], (size[0]/2**(5-ii), size[1]/2**(5-ii)))
                 gene_executor.forward(is_train=True)
                 out = gene_executor.outputs[0].asnumpy()
                 for j in range(batchsize):
