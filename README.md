@@ -3,7 +3,7 @@ fast style transfer with mxnet, can do videos
 
 ## Setup
 * Install skimage via pip: ```sudo pip install scikit-image```
-* Install [CUDA](https://developer.nvidia.com/cuda-downloads)
+* Install [CUDA](https://developer.nvidia.com/cuda-downloads) and Cudnn v4(this repo doesn't work with Cudnn v5)
 * Install [OpenCV](http://opencv.org) (if you want to transfer video)
 * Install [Mxnet](https://github.com/dmlc/mxnet)
 * Clone this repo
