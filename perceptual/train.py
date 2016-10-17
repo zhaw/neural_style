@@ -24,12 +24,14 @@ def postprocess_img(im):
 def crop_img(im, size):
     im = cv2.imread(im)
     im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-    if im.shape[0] > im.shape[1]:
-        c = (im.shape[0]-im.shape[1]) / 2
-        im = im[c:c+im.shape[1],:,:]
+    if im.shape[0]*size[0] > im.shape[1]*size[1]:
+        c = (im.shape[0]-1.*im.shape[1]/size[0]*size[1]) / 2
+        c = int(c)
+        im = im[c:-(1+c),:,:]
     else:
-        c = (im.shape[1]-im.shape[0]) / 2
-        im = im[:,c:c+im.shape[0],:]
+        c = (im.shape[1]-1.*im.shape[0]/size[1]*size[0]) / 2
+        c = int(c)
+        im = im[:,c:-(1+c),:]
     im = cv2.resize(im, size)
     return im
 
