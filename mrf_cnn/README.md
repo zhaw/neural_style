@@ -32,6 +32,19 @@ If there are pepper-noise-like bad pixel, increase tv-weight. If output image is
 
 
 ## Results
+Content image:
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower.jpg)
+
+Style images:
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image4.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image7.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image13.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image36.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image56.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image63.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image71.jpg)
+
+
 Results from the original version:
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower4a.jpg)
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower7a.jpg)
