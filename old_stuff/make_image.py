@@ -31,7 +31,7 @@ def preprocess_img(im, size):
     im = np.expand_dims(im, 0)
     return im
 
-def postprocess_img(im, color_ref=None):
+def postprocess_img(im):
     im = im[0]
     im[0,:] += 123.68
     im[1,:] += 116.779

@@ -1,3 +1,10 @@
 *.pyc
-out
-models
+*.swp
+vgg19.params
+mrf_cnn/output
+perceptual/models
+perceptual/output
+texturenet/pretrained/output
+texturenet/pretrained/models
+old_stuff/out
+old_stuff/models
