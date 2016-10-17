@@ -42,7 +42,7 @@ Style images:
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/image36.jpg)
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/image56.jpg)
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/image63.jpg)
-![alt text](https://github.com/zhaw/neural_style/blob/master/images/image71.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/image72.jpg)
 
 
 Results from the original version:
@@ -52,7 +52,7 @@ Results from the original version:
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower36a.jpg)
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower56a.jpg)
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower63a.jpg)
-![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower71a.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower72a.jpg)
 
 Results from the modified version:
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower4b.jpg)
@@ -61,4 +61,4 @@ Results from the modified version:
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower36b.jpg)
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower56b.jpg)
 ![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower63b.jpg)
-![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower71b.jpg)
+![alt text](https://github.com/zhaw/neural_style/blob/master/images/sunflower72b.jpg)
