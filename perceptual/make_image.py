@@ -2,24 +2,24 @@ import os
 import time
 import mxnet as mx
 import numpy as np
-import cv2
 import symbol
 import cPickle as pickle
 from matplotlib import pyplot as plt
+from skimage import io, transform
 
 
 def crop_img(im, size):
-    im = cv2.imread(im)
-    im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-    if im.shape[0]*size[0] > im.shape[1]*size[1]:
-        c = (im.shape[0]-1.*im.shape[1]/size[0]*size[1]) / 2
+    im = io.imread(im)
+    if im.shape[0]*size[1] > im.shape[1]*size[0]:
+        c = (im.shape[0]-1.*im.shape[1]/size[1]*size[0]) / 2
         c = int(c)
         im = im[c:-(1+c),:,:]
     else:
-        c = (im.shape[1]-1.*im.shape[0]/size[1]*size[0]) / 2
+        c = (im.shape[1]-1.*im.shape[0]/size[0]*size[1]) / 2
         c = int(c)
         im = im[:,c:-(1+c),:]
-    im = cv2.resize(im, size)
+    im = transform.resize(im, size)
+    im *= 255
     return im
 
 def preprocess_img(im, size):
@@ -44,11 +44,11 @@ def postprocess_img(im):
     im = np.swapaxes(im, 0, 1)
     im[im<0] = 0
     im[im>255] = 255
-    return cv2.cvtColor(im.astype(np.uint8), cv2.COLOR_RGB2BGR)
+    return im.astype(np.uint8)
 
 class Maker():
     def __init__(self, model_prefix, output_shape):
-        s0, s1 = output_shape
+        s1, s0 = output_shape
         s0 = s0//32*32
         s1 = s1//32*32
         self.s0 = s0
@@ -56,7 +56,7 @@ class Maker():
         generator = symbol.generator_symbol()
         args = mx.nd.load('%s_args.nd'%model_prefix)
         auxs = mx.nd.load('%s_auxs.nd'%model_prefix)
-        args['data'] = mx.nd.zeros([1,3,s1,s0], mx.gpu())
+        args['data'] = mx.nd.zeros([1,3,s0,s1], mx.gpu())
         self.gene_executor = generator.bind(ctx=mx.gpu(), args=args, aux_states=auxs)
 
     def generate(self, save_path, content_path):
@@ -64,4 +64,4 @@ class Maker():
         self.gene_executor.forward(is_train=True)
         out = self.gene_executor.outputs[0].asnumpy()
         im = postprocess_img(out)
-        cv2.imwrite(save_path, im)
+        io.imsave(save_path, im)

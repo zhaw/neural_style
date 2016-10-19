@@ -4,8 +4,8 @@ import os
 import mxnet as mx
 import numpy as np
 np.set_printoptions(precision=2)
-import cv2
 import symbol
+from skimage import io, transform
 
 VGGPATH = '../vgg19.params'
 MSCOCOPATH = '/home/zw/dataset/mscoco'
@@ -18,23 +18,25 @@ def postprocess_img(im):
     im = np.swapaxes(im, 0, 1)
     im[im<0] = 0
     im[im>255] = 255
-    return cv2.cvtColor(im.astype(np.uint8), cv2.COLOR_RGB2BGR)
+    return im.astype(np.uint8)
 
 def crop_img(im, size):
-    im = cv2.imread(im)
-    im = cv2.cvtColor(im, cv2.COLOR_BGR2RGB)
-    if im.shape[0]*size[0] > im.shape[1]*size[1]:
-        c = (im.shape[0]-1.*im.shape[1]/size[0]*size[1]) / 2
+    im = io.imread(im)
+    if im.shape[0]*size[1] > im.shape[1]*size[0]:
+        c = (im.shape[0]-1.*im.shape[1]/size[1]*size[0]) / 2
         c = int(c)
         im = im[c:-(1+c),:,:]
     else:
-        c = (im.shape[1]-1.*im.shape[0]/size[1]*size[0]) / 2
+        c = (im.shape[1]-1.*im.shape[0]/size[0]*size[1]) / 2
         c = int(c)
         im = im[:,c:-(1+c),:]
-    im = cv2.resize(im, (size,size))
+    im = transform.resize(im, size)
+    im *= 255
     return im
 
 def preprocess_img(im, size):
+    if type(size) == int:
+        size = (size, size)
     im = crop_img(im, size)
     im = im.astype(np.float32)
     im = np.swapaxes(im, 0, 2)
