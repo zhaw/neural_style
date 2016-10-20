@@ -177,12 +177,12 @@ for res in range(args.num_res):
     target_patch1 = np.zeros([1]+list(vgg_executor.outputs[1].shape[1:]))
     count0 = np.zeros_like(target_patch0)
     count1 = np.zeros_like(target_patch1)
-    for i1 in range(0, target_patch0.shape[2]-args.patch_size+1, 2):
-        for i2 in range(0, target_patch0.shape[3]-args.patch_size+1, 2):
+    for i1 in range(0, target_patch0.shape[2]-args.patch_size+1):
+        for i2 in range(0, target_patch0.shape[3]-args.patch_size+1):
             target_patch0[0,:,i1:i1+args.patch_size,i2:i2+args.patch_size] += patches0[nn0[i1,i2],:,:,:]
             count0[0,:,i1:i1+args.patch_size,i2:i2+args.patch_size] += 1
-    for i1 in range(0, target_patch1.shape[2]-args.patch_size+1, 2):
-        for i2 in range(0, target_patch1.shape[3]-args.patch_size+1, 2):
+    for i1 in range(0, target_patch1.shape[2]-args.patch_size+1):
+        for i2 in range(0, target_patch1.shape[3]-args.patch_size+1):
             target_patch1[0,:,i1:i1+args.patch_size,i2:i2+args.patch_size] += patches1[nn1[i1,i2],:,:,:]
             count1[0,:,i1:i1+args.patch_size,i2:i2+args.patch_size] += 1
     count0[count0==0] = 1
