@@ -210,9 +210,9 @@ for res in range(args.num_res):
         loss = [0, 0, 0]
         vgg_executor.forward(is_train=True)
         tv_grad_executor.forward()
-        mrf_grad0[:] = 2*args.style_weight[0] * (vgg_executor.outputs[0]-target_patch0).asnumpy() / np.prod(vgg_executor.outputs[0].shape)
-        mrf_grad1[:] = 2*args.style_weight[1] * (vgg_executor.outputs[1]-target_patch1).asnumpy() / np.prod(vgg_executor.outputs[1].shape)
-        content_grad[:] = 2*args.content_weight * (vgg_executor.outputs[-1]-target_content).asnumpy() / np.prod(vgg_executor.outputs[-1].shape)
+        mrf_grad0[:] = 2*args.style_weight[0] * (vgg_executor.outputs[0]-target_patch0) / np.prod(vgg_executor.outputs[0].shape)
+        mrf_grad1[:] = 2*args.style_weight[1] * (vgg_executor.outputs[1]-target_patch1) / np.prod(vgg_executor.outputs[1].shape)
+        content_grad[:] = 2*args.content_weight * (vgg_executor.outputs[-1]-target_content) / np.prod(vgg_executor.outputs[-1].shape)
         if epoch % 10 == 0:
             loss[0] = np.square(mrf_grad0.asnumpy()).sum() / (2*args.style_weight[0]) * np.prod(vgg_executor.outputs[0].shape)
             loss[1] = np.square(mrf_grad1.asnumpy()).sum() / (2*args.style_weight[1]) * np.prod(vgg_executor.outputs[1].shape)
