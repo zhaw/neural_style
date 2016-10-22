@@ -23,5 +23,5 @@ First, edit train.py, modify MSCOCOPATH at line11. Then, use function ```train_s
 
 
 # Pretrained Models
-I trained ~20 models, you can download them [here](http://pan.baidu.com/s/1geZlH31). Notice that the boundary effect is very severe due to the zero padding in convolution layers.
+I trained ~20 models, you can download them [here](http://pan.baidu.com/s/1geZlH31).
 
