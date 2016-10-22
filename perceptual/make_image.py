@@ -26,14 +26,20 @@ def preprocess_img(im, size):
     if type(size) == int:
         size = (size, size)
     im = crop_img(im, size)
-    im = im.astype(np.float32)
-    im = np.swapaxes(im, 0, 2)
-    im = np.swapaxes(im, 1, 2)
-    im[0,:] -= 123.68
-    im[1,:] -= 116.779
-    im[2,:] -= 103.939
-    im = np.expand_dims(im, 0)
-    return im
+    new_img = np.zeros([size[0]+128,size[1]+128,3])
+    new_img[64:-64,64:-64,:] = im
+    new_img[:64,:,:] = new_img[128:64:-1,:,:]
+    new_img[-64:,:,:] = new_img[-64:-128:-1,:,:]
+    new_img[:,:64,:] = new_img[:,128:64:-1,:]
+    new_img[:,-64:,:] = new_img[:,-64:-128:-1,:]
+    new_img = new_img.astype(np.float32)
+    new_img = np.swapaxes(new_img, 0, 2)
+    new_img = np.swapaxes(new_img, 1, 2)
+    new_img[0,:] -= 123.68
+    new_img[1,:] -= 116.779
+    new_img[2,:] -= 103.939
+    new_img = np.expand_dims(new_img, 0)
+    return new_img 
 
 def postprocess_img(im):
     im = im[0]
@@ -44,7 +50,7 @@ def postprocess_img(im):
     im = np.swapaxes(im, 0, 1)
     im[im<0] = 0
     im[im>255] = 255
-    return im.astype(np.uint8)
+    return im[64:-64,64:-64,:].astype(np.uint8)
 
 class Maker():
     def __init__(self, model_prefix, output_shape):
@@ -56,7 +62,7 @@ class Maker():
         generator = symbol.generator_symbol()
         args = mx.nd.load('%s_args.nd'%model_prefix)
         auxs = mx.nd.load('%s_auxs.nd'%model_prefix)
-        args['data'] = mx.nd.zeros([1,3,s0,s1], mx.gpu())
+        args['data'] = mx.nd.zeros([1,3,s0+128,s1+128], mx.gpu())
         self.gene_executor = generator.bind(ctx=mx.gpu(), args=args, aux_states=auxs)
 
     def generate(self, save_path, content_path):
