@@ -1,7 +1,9 @@
 *.pyc
 *.swp
+*script.sh
 vgg19.params
 mrf_cnn/output
+mrf_cnn/*.jpg
 perceptual/models
 perceptual/output
 texturenet/pretrained/output
