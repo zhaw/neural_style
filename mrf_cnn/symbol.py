@@ -47,14 +47,14 @@ class AssignPatch(mx.operator.NDArrayOp):
     def infer_shape(self, in_shape):
         nn_shape = in_shape[0]
         source_shape = in_shape[1]
-        return in_shape, [[source_shape[1], nn_shape[0]+source_shape[2]-1, nn_shape[1]+source_shape[3]-1]]
+        return in_shape, [[1,source_shape[1], nn_shape[0]+source_shape[2]-1, nn_shape[1]+source_shape[3]-1]]
 
     def forward(self, in_data, out_data):
         nn, source = in_data
         target = out_data[0]
         if self.fwd_kernel is None:
             self.fwd_kernel = mx.rtc('assignpatch', [('nn', nn), ('source', source)], [('target', target)], """
-                int target_idx = threadIdx.x*target_dims[2]*target_dims[1]+blockIdx.x*target_dims[2]+blockIdx.y;
+                int target_idx = threadIdx.x*target_dims[3]*target_dims[2]+blockIdx.x*target_dims[3]+blockIdx.y;
                 int source_idx = nn[blockIdx.x*nn_dims[1]+blockIdx.y]*source_dims[1]*source_dims[2]*source_dims[3]
                                     + threadIdx.x*source_dims[2]*source_dims[3];
                 for (int i = 0; i < source_dims[2]; i++){
@@ -63,10 +63,10 @@ class AssignPatch(mx.operator.NDArrayOp):
                         target_idx++;
                         source_idx++;
                     }
-                    target_idx += target_dims[2]-source_dims[3];
+                    target_idx += target_dims[3]-source_dims[3];
                 }
             """)
-        self.fwd_kernel.push([nn, source], [target], (target.shape[1]-source.shape[2]+1, target.shape[2]-source.shape[3]+1, 1), (source.shape[1],1,1))
+        self.fwd_kernel.push([nn, source], [target], (target.shape[2]-source.shape[2]+1, target.shape[3]-source.shape[3]+1, 1), (source.shape[1],1,1))
 
 
 def assign_symbol():

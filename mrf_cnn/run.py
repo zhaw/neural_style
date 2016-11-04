@@ -110,6 +110,10 @@ for name in arg_names:
         arg_dict[name] = pretrained[key].copyto(mx.gpu())
 del pretrained
 img = None
+args.size[0] = args.size[0] // 4 * 4
+args.size[1] = args.size[1] // 4 * 4
+args.style_size[0] = args.style_size[0] // 4 * 4
+args.style_size[1] = args.style_size[1] // 4 * 4
 args.size = args.size[::-1]
 args.style_size = args.style_size[::-1]
 rotations = [15*i for i in range(-args.num_rotation, args.num_rotation+1)]
@@ -146,18 +150,13 @@ img += np.random.uniform(-args.noise, args.noise, img.shape)
 img = preprocess_img(img)
 arg_dict['data'] = mx.nd.zeros([1,3,args.size[0],args.size[1]], mx.gpu())
 arg_dict['data'][:] = img
-vgg_executor = vgg_symbol.bind(ctx=mx.gpu(), args=arg_dict, grad_req='null')
+grad_dict = {"data": arg_dict["data"].copyto(mx.gpu())}
+vgg_executor = vgg_symbol.bind(ctx=mx.gpu(), args=arg_dict, args_grad=grad_dict, grad_req='write')
 vgg_executor.forward()
-target_layer = []
-for l in range(args.num_res):
-    target_layer.append(vgg_executor.outputs[l].copyto(mx.gpu()))
 original_content = []
 for l in range(args.num_res):
     original_content.append(vgg_executor.outputs[l].copyto(mx.gpu()))
-# optimize
-arg_dict['data'][:] = img
-grad_dict = {"data": arg_dict["data"].copyto(mx.gpu())}
-vgg_executor = vgg_symbol.bind(ctx=mx.gpu(), args=arg_dict, args_grad=grad_dict, grad_req='write')
+# optimizer
 tv_grad_executor = get_tv_grad_executor(vgg_executor.arg_dict['data'], mx.gpu(), args.tv_weight) 
 optimizer = mx.optimizer.SGD(learning_rate=args.lr, wd=0e-0, momentum=0.9)
 optim_state = optimizer.create_state(0, arg_dict['data'])
@@ -172,10 +171,10 @@ pcs = []
 ass_executors = []
 nns = []
 for l in range(args.num_res):
-    pc = np.zeros(vgg_executor.outputs[l].shape[1:])
+    pc = np.zeros(vgg_executor.outputs[l].shape)
     for i1 in range(0, vgg_executor.outputs[l].shape[2]-args.patch_size+1):
         for i2 in range(0, vgg_executor.outputs[l].shape[3]-args.patch_size+1):
-            pc[:,i1:i1+args.patch_size,i2:i2+args.patch_size] += 1
+            pc[0,:,i1:i1+args.patch_size,i2:i2+args.patch_size] += 1
     pc = mx.nd.array(pc, mx.gpu())
     nn = mx.nd.zeros([vgg_executor.outputs[l].shape[2]-args.patch_size+1, vgg_executor.outputs[l].shape[3]-args.patch_size+1], mx.gpu())
     assign_symbol = symbol.assign_symbol()
@@ -194,16 +193,19 @@ for epoch in range(args.epochs):
             ass_executors[l].outputs[0][:] = 0
             ass_executors[l].forward()
             ass_executors[l].outputs[0][:] /= pcs[l]
-            target_layer[l][:] = 1./(args.style_weight[l]+args.content_weight[l]) * (args.style_weight[l]*mx.nd.expand_dims(ass_executors[l].outputs[0], axis=0) + args.content_weight[l]*original_content[l])
+            # compute target layer
+            ass_executors[l].outputs[0][:] *= args.style_weight[l]
+            ass_executors[l].outputs[0][:] += args.content_weight[l]*original_content[l]
+            ass_executors[l].outputs[0][:] *= 1./(args.style_weight[l]+args.content_weight[l])
     tv_grad_executor.forward()
     if epoch > args.epochs - 30:
         for l in range(1,args.num_res):
             vgg_executor.outputs[l][:] = 0
-        vgg_executor.outputs[0][:] -= target_layer[0] # grad, just to save memory
+        vgg_executor.outputs[0][:] -= ass_executors[0].outputs[0] # grad
         vgg_executor.outputs[0][:] *= (args.style_weight[0]+args.content_weight[0]) / np.prod(vgg_executor.outputs[0].shape)
     else:
         for l in range(args.num_res):
-            vgg_executor.outputs[l][:] -= target_layer[l] # grad, just to save memory
+            vgg_executor.outputs[l][:] -= ass_executors[l].outputs[0] # grad
             vgg_executor.outputs[l][:] *= (args.style_weight[l]+args.content_weight[l]) / np.prod(vgg_executor.outputs[l].shape)
     if epoch % 10 == 0:
         total_loss = 0
