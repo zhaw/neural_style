@@ -128,7 +128,7 @@ for s in scales:
     scaled = transform.rescale(style_img, s)
     arg_dict['data'] = mx.nd.zeros([len(rotations),3,scaled.shape[0],scaled.shape[1]], mx.gpu())
     for r in range(len(rotations)):
-        arg_dict['data'][r:r+1] = preprocess_img(transform.rotate(scaled, rotations[r]))
+        arg_dict['data'][r:r+1] = preprocess_img(transform.rotate(scaled, rotations[r], mode='reflect'))
     vgg_executor = vgg_symbol.bind(ctx=mx.gpu(), args=arg_dict, grad_req='null')
     vgg_executor.forward()
     for l in range(args.num_res):

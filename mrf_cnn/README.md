@@ -14,7 +14,7 @@ In run.py, I implemented [paper](https://arxiv.org/abs/1601.04589), with a littl
 * style-size: shape that style image be resized to, this is very import because scale matters a lot in this model
 * lr: learning rate
 * num-res: depth of pyramid, see symbol.py for detail
-* num-rotation: rotate style image how many times, better set to zero or there will be pure black patches
+* num-rotation: rotate style image how many times
 * num-scale: scale style image how many times
 * stride: stride when extract MRF patches
 * patch-size: size of MRF patches
