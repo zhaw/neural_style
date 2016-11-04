@@ -2,6 +2,8 @@
 
 In run.py, I implemented [paper](https://arxiv.org/abs/1601.04589), with a little change. If you want to use it, here is an example: ```python run.py --content-image path_to_img --style-image path_to_image --content-weight 1e-1 3e-1 3e-1 --style-weight 1 1 1 --tv-weight 1e-5 --epochs 200 --size 1024 768 --style-size 512 512 --lr 3e3 --output path_to_save --num-res 3 --num-rotation 0 --num-scale 1 --stride 2 --patch-size 3 --noise 0```
 
+Before you start, you need to download [VGG model](https://github.com/dmlc/web-data/raw/master/mxnet/neural-style/model/vgg19.params) and save it to the root of this repository.
+
 ## Meaning of Arguments
 
 * content-image: path to content image
