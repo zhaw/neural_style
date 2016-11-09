@@ -7,7 +7,7 @@ import cPickle as pickle
 from matplotlib import pyplot as plt
 from skimage import io, transform
 
-VGGPATH = '../test/vgg19.params'
+VGGPATH = '../vgg19.params'
 
 def crop_img(im, size):
     im = io.imread(im)

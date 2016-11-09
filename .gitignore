@@ -1,5 +1,6 @@
 *.pyc
 *.swp
+*.zip
 *script.sh
 nohup.out
 vgg19.params

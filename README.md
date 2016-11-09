@@ -16,4 +16,6 @@ Folder perceptual implements [Perceptual Losses for Real-Time Style Transfer and
 
 Folder texturenet implements [Texture Networks: Feed-forward Synthesis of Textures and Stylized Images](http://arxiv.org/abs/1603.03417). It also trains a network to do optimization. [Original Torch version](https://github.com/DmitryUlyanov/texture_nets)
 
+Folder fast_mrf_cnn trains network to do optimization in mrf_cnn. It is very fast and can give result similar to but not as good as mrf_cnn.
+
 Folder old_stuff contains some pretrained texture network models.
