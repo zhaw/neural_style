@@ -1,6 +1,7 @@
 *.pyc
 *.swp
 *script.sh
+nohup.out
 vgg19.params
 mrf_cnn/output
 mrf_cnn/*.jpg
