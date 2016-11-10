@@ -133,8 +133,8 @@ for s in scales:
     vgg_executor.forward()
     for l in range(args.num_res):
         tmp = vgg_executor.outputs[l].asnumpy()
-        for ii in range(0, vgg_executor.outputs[l].shape[2]-args.patch_size+1, args.stride/2**l):
-            for jj in range(0, vgg_executor.outputs[l].shape[3]-args.patch_size+1, args.stride/2**l):
+        for ii in range(0, vgg_executor.outputs[l].shape[2]-args.patch_size+1, max(1,args.stride/2**l)):
+            for jj in range(0, vgg_executor.outputs[l].shape[3]-args.patch_size+1, max(1,args.stride/2**l)):
                 for r in range(len(rotations)):
                     patches[l].append(tmp[r,:,ii:ii+args.patch_size,jj:jj+args.patch_size])
 for l in range(args.num_res):
