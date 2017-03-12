@@ -23,5 +23,4 @@ First, edit train.py, modify MSCOCOPATH at line11. Then, use function ```train_s
 
 
 # Pretrained Models
-I trained ~20 models, you can download them [here](http://pan.baidu.com/s/1geZlH31).
-
+I trained ~20 models, you can download them [here](http://pan.baidu.com/s/1geZlH31), or get them via [bittorrent](https://github.com/zhaw/neural_style/files/835903/perceptual_models.torrent.zip).
